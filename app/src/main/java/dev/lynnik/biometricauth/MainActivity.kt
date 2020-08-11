@@ -46,12 +46,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun authenticate() {
-        when (val canAuthenticate = biometricManager.canAuthenticate()) {
+        when (biometricManager.canAuthenticate()) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 biometricPrompt.authenticate(promptInfo)
             }
-            else -> {
-                toast("Could not authenticate because: $canAuthenticate")
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                toast("No biometric features available on this device")
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                toast("Biometric features are currently unavailable")
+            }
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                toast("The user hasn't associated any biometric credentials with their account")
             }
         }
     }
